@@ -1,8 +1,11 @@
 from django.shortcuts import  render, redirect
 from django.http import JsonResponse
 from django.db import connection
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import serializers  # Import for general serializer usage
 from .models import Ticket, Action
-from .forms import TicketForm, ActionForm
+from .forms import TicketForm, ActionForm, TagForm, KASearchForm
 
 
 def update_ticket(request):
@@ -10,59 +13,85 @@ def update_ticket(request):
     # Create a form instance with submitted data
     ticket_form = TicketForm(request.POST)
     actions_form = ActionForm(request.POST)
+    ka_search_form = KASearchForm(request.POST)
 
     if ticket_form.is_valid() and actions_form.is_valid():
       print('ticket is valid')
-      # Retrieve ticket object based on submitted ka_number
-      print(ticket_form.cleaned_data)
 
-      ticket = Ticket()
-      actions = Action()
+      ticket = ticket_form.save()  # Save the ticket form and get the instance
 
-      # Update the ticket object with form data
-      ticket.ka_number = ticket_form.cleaned_data['ka_number']
-      ticket.ka_title = ticket_form.cleaned_data['ka_title']
-      ticket.service = ticket_form.cleaned_data['service']
-      ticket.configuration_item = ticket_form.cleaned_data['configuration_item']
-      ticket.save()
+      # Access the Action instance created by actions_form.save()
+      action = actions_form.save()  
 
-      actions.subject = actions_form.cleaned_data['subject']
-      actions.description = actions_form.cleaned_data['description']
-      actions.actions_and_solutions = actions_form.cleaned_data['actions_and_solutions']
-      actions.save()
+      # Add the action to the ticket's actions ManyToManyField
+      ticket.actions.add(action)
 
-      ticket.actions.add(actions)
-      
-      
-    for e in Action.objects.all():
-      print(e.subject)
-
-      # Redirect to success page (or display success message)
-      return redirect('success')  # Replace with your actual success URL pattern name
+      # Redirect to success page or display success message
+      return redirect('success')
+   
   else:
     # Render the empty form
     ticket_form = TicketForm()
     actions_form = ActionForm()
+    ka_search_form = KASearchForm()
 
-  context = {'ticket_form': ticket_form, 'actions_form' : actions_form}
+  context = {'ticket_form': ticket_form, 'actions_form' : actions_form, 'ka_search_form' : ka_search_form}
   return render(request, 'update_ticket.html', context)
+
+
+def search_ticket(request):
+    if request.method == 'POST':
+      # Create a form instance with submitted data
+      ticket_form = TicketForm(request.POST)
+      actions_form = ActionForm(request.POST)
+      ka_search_form = KASearchForm(request.POST)
+      ka_number = int(ka_search_form['ka_number'].value())
+      ticket = Ticket.objects.filter(ka_number=ka_number)[0]
+      actions = ticket.actions.all().values()[0]
+      template = {}
+
+      template[str(ticket.ka_number)] = {}
+      template[str(ticket.ka_number)]['Subject'] = actions['subject']
+      template[str(ticket.ka_number)]['Service'] = ticket.service
+      template[str(ticket.ka_number)]['Configuration Item'] = ticket.configuration_item
+      template[str(ticket.ka_number)]['Type'] = ticket.ticket_type
+      template[str(ticket.ka_number)]['Description'] = actions['description']
+      template[str(ticket.ka_number)]['Actions & Solutions'] = actions['actions_and_solutions']
+
+      ticket_form = TicketForm(initial={'ka_number': ka_number,'service': ticket.service,'configuration_item':ticket.configuration_item,
+        'type' : ticket.ticket_type})
+      actions_form = ActionForm(initial={'actions_and_solutions' : actions['actions_and_solutions'], 'subject' : actions['subject'], 'description' : actions['description']})
+
+      context = {'ticket_form': ticket_form, 'actions_form' : actions_form, 'ka_search_form' : ka_search_form}
+      return render(request, 'update_ticket.html', context)
+
 
 def success(request):
     print('it worked')
     return render(request, 'success.html', {})
 
 
-def list_tickets_raw(request):
-  # Execute a raw SQL query
-  with connection.cursor() as cursor:
-    cursor.execute("SELECT * FROM template_updater_ticket")  # Replace with your table name
-    tickets = cursor.fetchall()
-
-  # Iterate through query results and print data
+def update_KA_json(request):
+  tickets = Ticket.objects.all()
+  d = {}
   for ticket in tickets:
-    print(f"Ticket #{ticket[0]} - {ticket[1]}")  # Assuming column order (number, subject)
+    print(ticket)
+    actions = ticket.actions.all().values()[0]
 
-  return render(request, 'list_tickets.html', {})  # No context needed here
+    d[str(ticket.ka_number)] = {}
+    d[str(ticket.ka_number)]['Subject'] = actions['subject']
+    d[str(ticket.ka_number)]['Service'] = ticket.service
+    d[str(ticket.ka_number)]['Configuration Item'] = ticket.configuration_item
+    d[str(ticket.ka_number)]['Type'] = ticket.ticket_type
+    d[str(ticket.ka_number)]['Description'] = actions['description']
+    d[str(ticket.ka_number)]['Actions & Solutions'] = actions['actions_and_solutions']
+    #d[str(ticket.ka_number)]['Tags'] = To add later, will be the tags that the user can search
+
+  response = JsonResponse(d, safe=False)
+  response['Access-Control-Allow-Origin'] = '*'
+  return response
+
+
 
 
 
@@ -76,8 +105,7 @@ def search_ka_number(request, ka_number):
         # Return relevant data as a dictionary for the response
         return JsonResponse({
             'ka_number': ticket_data['ka_number'],
-            'ka_title': ticket_data['ka_title'],
-            # ... include other relevant data
+            'ka_title': ticket_data['ka_title']
         })
     else:
         # Handle case where no ticket is found
