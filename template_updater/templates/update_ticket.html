@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Update Template</title>
+</head>
+<body>
+  <h1>Update Template</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ actions_form.as_p }}
+    {{ ticket_form.as_p }}
+
+    <button type="button" id="search_ka_number">Search KA Number</button>
+
+    <script>
+        document.getElementById('search_ka_number').addEventListener('click', function() {
+            // Get the KA number from user input
+            var ka_number = document.getElementById('id_ka_number').value;
+
+            if (ka_number) {
+                console.log('it is here');
+                fetch(`/search_ka_number/${ka_number}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update form fields directly (avoid form submission)
+                        document.getElementById('ka_number').value = data.ka_number;
+                        document.getElementById('ka_title').value = data.ka_title;
+                        // ... update other fields as needed
+                    })
+                    .catch(error => console.error(error));
+            } else {
+                alert('Please enter a KA number to search.');
+            }
+        });
+    </script>
+    <button type="submit">Update Ticket</button>
+</form>
+
+</body>
+</html>
