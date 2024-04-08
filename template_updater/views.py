@@ -1,4 +1,5 @@
 from django.shortcuts import  render, redirect
+from django.contrib.auth import logout, login
 from django.http import JsonResponse
 from django.db import connection
 from rest_framework.views import APIView
@@ -9,44 +10,61 @@ from .forms import TicketForm, ActionForm, TagForm, KASearchForm
 
 
 def update_ticket(request):
-  if request.method == 'POST':
-    # Create a form instance with submitted data
+  if request.method == 'POST' and 'updated' in request.POST:
     ticket_form = TicketForm(request.POST)
     actions_form = ActionForm(request.POST)
     ka_search_form = KASearchForm(request.POST)
 
-    if ticket_form.is_valid() and actions_form.is_valid():
-      print('ticket is valid')
+    if Ticket.objects.filter(ka_number=int(request.POST['ka_number'])).exists():
+      ticket = Ticket.objects.filter(ka_number=int(request.POST['ka_number']))[0]
 
-      ticket = ticket_form.save()  # Save the ticket form and get the instance
+      actions = ticket.actions.all()  # Fetches all related Action objects
 
-      # Access the Action instance created by actions_form.save()
-      action = actions_form.save()  
+      # Update fields (consider iteration or filtering for specific actions)
+      for action in actions:
+          action.subject = request.POST['subject']  # Update subject for all related actions
+          action.description = request.POST['description']
+          action.actions_and_solutions = request.POST['actions_and_solutions']
 
-      # Add the action to the ticket's actions ManyToManyField
-      ticket.actions.add(action)
+      # Save changes to all Action objects
+      for action in actions:
+          action.save()
 
-      # Redirect to success page or display success message
+      ticket.ka_number = request.POST['ka_number']
+      ticket.service = request.POST['service']
+      ticket.ticket_type = request.POST['ticket_type']
+      ticket.configuration_item = request.POST['configuration_item']
+
+      ticket.save()
+
       return redirect('success')
-   
-  else:
-    # Render the empty form
+
+    else:
+      # Create a form instance with submitted data
+      
+
+      if ticket_form.is_valid() and actions_form.is_valid():
+        print('ticket is valid')
+
+        ticket = ticket_form.save()  # Save the ticket form and get the instance
+
+        # Access the Action instance created by actions_form.save()
+        action = actions_form.save()  
+
+        # Add the action to the ticket's actions ManyToManyField
+        ticket.actions.add(action)
+
+        # Redirect to success page or display success message
+        return redirect('success')
+  
+  elif request.method == 'POST' and 'searched' in request.POST:
     ticket_form = TicketForm()
     actions_form = ActionForm()
-    ka_search_form = KASearchForm()
 
-  context = {'ticket_form': ticket_form, 'actions_form' : actions_form, 'ka_search_form' : ka_search_form}
-  return render(request, 'update_ticket.html', context)
-
-
-def search_ticket(request):
-    if request.method == 'POST':
-      # Create a form instance with submitted data
-      ticket_form = TicketForm(request.POST)
-      actions_form = ActionForm(request.POST)
-      ka_search_form = KASearchForm(request.POST)
-      ka_number = int(ka_search_form['ka_number'].value())
+    ka_number = request.POST['search_ka']
+    if Ticket.objects.filter(ka_number=int(ka_number)).exists():
       ticket = Ticket.objects.filter(ka_number=ka_number)[0]
+
       actions = ticket.actions.all().values()[0]
       template = {}
 
@@ -59,15 +77,28 @@ def search_ticket(request):
       template[str(ticket.ka_number)]['Actions & Solutions'] = actions['actions_and_solutions']
 
       ticket_form = TicketForm(initial={'ka_number': ka_number,'service': ticket.service,'configuration_item':ticket.configuration_item,
-        'type' : ticket.ticket_type})
+        'ticket_type' : ticket.ticket_type})
       actions_form = ActionForm(initial={'actions_and_solutions' : actions['actions_and_solutions'], 'subject' : actions['subject'], 'description' : actions['description']})
 
-      context = {'ticket_form': ticket_form, 'actions_form' : actions_form, 'ka_search_form' : ka_search_form}
+      context = {'ticket_form': ticket_form, 'actions_form' : actions_form}
       return render(request, 'update_ticket.html', context)
+    else:
+      ticket_form = TicketForm()
+      actions_form = ActionForm()
+      context = {'ticket_form': ticket_form, 'actions_form' : actions_form, 'nonexistant' : 'KA not found'}
+      return render(request, 'update_ticket.html', context)
+    
+  else:
+    # Render the empty form
+    ticket_form = TicketForm()
+    actions_form = ActionForm()
+    ka_search_form = KASearchForm()
+
+  context = {'ticket_form': ticket_form, 'actions_form' : actions_form, 'ka_search_form' : ka_search_form}
+  return render(request, 'update_ticket.html', context)
 
 
 def success(request):
-    print('it worked')
     return render(request, 'success.html', {})
 
 
@@ -93,21 +124,7 @@ def update_KA_json(request):
 
 
 
-
-
-def search_ka_number(request, ka_number):
-    # Implement your logic to search for the KA number (e.g., database lookup)
-    # Assuming you have a function to retrieve ticket details by KA number:
-    ticket_data = Ticket.objects.get(ka_number=ka_number)
-    print(type(ticket_data))
-
-    if ticket_data:
-        # Return relevant data as a dictionary for the response
-        return JsonResponse({
-            'ka_number': ticket_data['ka_number'],
-            'ka_title': ticket_data['ka_title']
-        })
-    else:
-        # Handle case where no ticket is found
-        return JsonResponse({'error': 'KA number not found.'}, status=404)
-
+def custom_logout(request):
+    logout(request)
+    context = {}  # Add any custom context data if needed
+    return render(request, 'logout.html', context=context)
