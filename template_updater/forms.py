@@ -44,3 +44,4 @@ class TagForm(forms.ModelForm):
         super(TagForm, self).__init__(*args, **kwargs)
         self.fields['name'].label = "Tags, separated by commas"
 
+

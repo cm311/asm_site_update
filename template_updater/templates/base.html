@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template Updater</title>
+    <style>
+        body {
+          font-family: sans-serif;
+          background-color: #247ba0; /* Blue background for entire page */
+          color: #d0e2f2; /* Dirty white color for text */
+        }
+        
+        h1 {
+          text-align: center; /* Centers the H1 text horizontally */
+          font-family: 'Inconsolata', monospace; /* Monospace digital font */
+          font-size: 2em; /* Sets font size to 2 times the default */
+        }
+        
+        form {
+          width: 66.66%; /* Form takes up 2/3 of the page width */
+          margin: 0 auto; /* Centers the form horizontally */
+          padding: 20px;
+          background-color:  #247ba0; /* White background for the form to contrast with blue page */
+        }
+        
+        .form-group {
+          margin-bottom: 15px;
+        }
+        
+        label {
+          display: block; /* Makes labels stack vertically */
+          width: 14%; /* Sets label width */
+          text-align: left; /* Aligns label text to the right */
+          font-family: 'Inconsolata', monospace;
+          margin-right: 10px; /* Adds some space between label and input */
+        }
+
+        p {
+          display: block; /* Makes labels stack vertically */
+          width: 14%; /* Sets label width */
+          text-align: left; /* Aligns label text to the right */
+          font-family: 'Inconsolata', monospace;
+          margin-right: 10px; /* Adds some space between label and input */
+        }
+        
+        input[type="text"], textarea {
+          width: 100%; /* Makes input fields take up remaining space */
+          padding: 5px;
+          border: 1px solid #ccc;
+          color: rgb(12, 11, 11); /* White text color for contrast */
+          box-sizing: border-box; /* Ensures padding doesn't affect width */
+        }
+        
+        textarea {
+          background-color: #fff; /* Blue background for textarea */
+          color: rgb(12, 11, 11); /* White text color for contrast */
+          font-family: 'Inconsolata', monospace; /* Monospace digital font */
+          font-size: 0.9em; /* Slightly smaller font size */
+        }
+        
+        button {
+          margin-top: 10px;
+        }
+          </style>
+</head>
+<body>
+
+<nav>
+    {% if user.is_authenticated %}
+        <span>Welcome, {{ user.username }}</span>
+        <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</nav>
+
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>
