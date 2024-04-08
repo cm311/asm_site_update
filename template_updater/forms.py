@@ -10,12 +10,6 @@ class TicketForm(forms.ModelForm):
     super(TicketForm, self).__init__(*args, **kwargs)
     self.fields['ticket_type'].widget = forms.Textarea(attrs={'cols': 80, 'rows': 1})  # Adjust cols and rows as needed
 
-class KASearchForm(forms.ModelForm):
-    class Meta:
-        model = Ticket
-        fields = ['ka_number']
-    def __init__(self, *args, **kwargs):
-        super(KASearchForm, self).__init__(*args, **kwargs)
 
 class ActionForm(forms.ModelForm):
     class Meta:
@@ -24,6 +18,22 @@ class ActionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ActionForm, self).__init__(*args, **kwargs)
+
+
+
+
+
+
+
+
+class KASearchForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ['ka_number']
+    def __init__(self, *args, **kwargs):
+        super(KASearchForm, self).__init__(*args, **kwargs)
+
+
 
 class TagForm(forms.ModelForm):
     class Meta:
