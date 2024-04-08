@@ -24,6 +24,7 @@ class Ticket(models.Model):
   ka_title = models.CharField(max_length=255) # The KA description
   service = models.CharField(max_length=355) # The service dropbox
   configuration_item = models.CharField(max_length=355) # the configuration item dropbox
+  ticket_type = models.CharField(max_length=455)
 
   actions = models.ManyToManyField(Action, related_name='tickets') # Each KA can have several possible actions and solutions
   tags = models.ManyToManyField(Tag, related_name='tickets') # Each KA has several tags.  Things are searched by this tag.
@@ -31,7 +32,7 @@ class Ticket(models.Model):
   
 
   def __str__(self):
-    return f"KA #{self.ka_number} - {self.ka_title}"
+    return f"KA #{self.ka_number} - {self.ka_title} - {self.actions}"
 
 
 
