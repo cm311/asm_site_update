@@ -104,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_REDIRECT_URL = '/'  # Redirect to the main page (usually the root URL)
+LOGIN_REDIRECT_URL = '../approve_updates/'  # Redirect to the main page (usually the root URL)
 
 
 

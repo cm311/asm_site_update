@@ -3,6 +3,12 @@
 <head>
     <title>Template Updater</title>
     <style>
+
+      nav {
+        display: flex;  /* Make the navbar a flex container */
+        justify-content: flex-end;  /* Align content to the right */
+      }
+
         body {
           font-family: sans-serif;
           background-color: #247ba0; /* Blue background for entire page */
@@ -60,21 +66,91 @@
         button {
           margin-top: 10px;
         }
+        #side-menu {
+          position: fixed;
+          top: 0;
+          left: -21%;  /* Position slightly off-screen */
+          width: 30%;  /* Menu width */
+          height: 100vh;  /* Set menu height to 100% viewport height */
+          background-color: #44acdb;  /* Menu background color */
+          transition: left 0.3s ease-in-out;  /* Smooth slide-out animation */
+      }
+      
+      #side-menu.open {  /* Show menu when open class is added */
+          left: 0;  /* Slide menu into view */
+      }
+      
+      #menu-trigger {
+          display: flex;
+          justify-content: right;
+          align-items: right;
+          height: 10%%;  /* Define trigger element height */
+          background-color: #2a8cb8;  /* Trigger background color */
+          cursor: pointer;  /* Make trigger clickable */
+          transition: background-color 0.2s ease-in-out;
+      }
+      
+      #main-content {
+          margin-left: 300px;  /* Make space for the side menu */
+          padding: 2%;
+      }
+      
+      #side-menu ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          margin-top: 50px;  /* Make space for the trigger element */
+      }
+      
+      #side-menu li {
+          padding: 10px;
+          color: black;
+      }
+      
+      #side-menu a {
+          text-decoration: none;
+          color: black;
+      }
+      
+      #side-menu a:hover {
+          color: #333;
+      }
+
+      #message p {
+        color: black;
+        text-align: right;
+        width: 20%;
+        margin-right:0px;
+        display: flex;
+      }
+
+      .form-container {
+        display: inline-block;  /* Display forms side-by-side */
+        width: 45%;  /* Set width to roughly half the available space */
+        vertical-align: top;  /* Align forms at the top */
+        margin: 10px;  /* Add some margin between forms */
+        border: 1px solid #ddd;  /* Add a border for styling */
+        padding: 15px;  /* Add padding for content */
+      }
+      
+      .form-container h2 {
+        margin-bottom: 10px;  /* Add some space below headings */
+      }
+      
           </style>
 </head>
 <body>
     
-<!--
+
 <nav>
     {% if user.is_authenticated %}
         <span>Welcome, {{ user.username }}</span>
-        <a href="{ url 'logout' }">Logout</a>
+        <a href="{% url 'logout' %}">Logout</a>
     {% else %}
-        <a href="{ url 'login' }">Login</a>
+        <a href="{% url 'login' %}">Login</a>
     {% endif %}
 </nav>
 
--->
 
 <div id="content">
     {% block content %}

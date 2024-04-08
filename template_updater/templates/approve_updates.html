@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="side-menu">
+    <div id="menu-trigger">
+      <div id="message">
+        <p>Suggested Updates</p>
+      </div>
+    </div>
+    <ul>
+      {% for object in suggested_updated %}
+        <li><a href="http://www.google.com">{{ object.ka_number }} - {{ object.subject }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div id="main-content">
+    <div class="form-container">
+      <h2>Form 1</h2>
+      <form>
+      </form>
+    </div>
+    <div class="form-container">
+      <h2>Form 2</h2>
+      <form>
+        </form>
+    </div>
+  </div>
+
+
+<script>
+    const sideMenu = document.getElementById('side-menu');
+
+    sideMenu.addEventListener('mouseleave', () => {
+    sideMenu.classList.remove('open');
+    });
+
+    sideMenu.addEventListener('mouseover', () => {
+    sideMenu.classList.add('open');
+    });
+</script>
+
+{% endblock %}
