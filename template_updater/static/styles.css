@@ -1,0 +1,27 @@
+form {
+    background-color: #247ba0; /* A cool blue color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Add some rounded corners */
+    color: white; /* Text color white for contrast */
+    padding: 15px 20px; /* Add some padding */
+    font-family: inherit; /* Inherit font from parent element */
+    font-size: 16px; /* Set the font size */
+  }
+  
+  form:hover {
+    background-color: #176981; /* Change background color on hover for interactivity */
+    cursor: pointer; /* Change cursor to indicate clickability */
+  }
+  
+  /* Optional styles to make it look even cooler  */
+  
+  form:focus {
+    outline: 0; /* Remove default outline */
+    box-shadow: 0 0 0 3px rgba(0, 128, 255, 0.5); /* Add a subtle blue outline on focus */
+  }
+  
+  btn { /* Style buttons with the "blueForms" class */
+    display: inline-block; /* Make buttons behave like inline elements */
+    padding: 10px 20px; /* Adjust padding for buttons */
+  }
+  
