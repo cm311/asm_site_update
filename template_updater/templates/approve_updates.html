@@ -16,6 +16,8 @@
   </div>
 
   <div id="main-content">
+    <p style="width: 100%; margin-left:10%; margin-top: 0%">Enter {0} where name should be.  e.g.  'Name: Bob' would be Name: {0}</p>
+    <p style="width: 100%; margin-left:10%; margin-top: 0%">Enter {1} where store number should be.  e.g.  'remoted into wpaf8523-x1' would be 'remoted into wpaf{1}-x1'</p>
     <div class="form-container form-container-1">  <form>
         {% csrf_token %}
         {% load crispy_forms_tags %}

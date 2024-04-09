@@ -3,6 +3,7 @@
 
 {% block content %}
   <h1> Update Template </h1>
+  
   <div style="display: flex; flex-direction: row;">
 
     <div>
@@ -19,6 +20,9 @@
     </div>
 
     <form method="post" action="{% url 'update_ticket' %}">
+      <p style="width: 100%; margin-left:10%; margin-top: 0%">Enter {0} where name should be.  e.g.  'Name: Bob' would be Name: {0}</p>
+    <p style="width: 100%; margin-left:10%; margin-top: 0%">Enter {1} where store number should be.  e.g.  'remoted into wpaf8523-x1' would be 'remoted into wpaf{1}-x1'</p>
+      
       {% csrf_token %}
 
       {% load crispy_forms_tags %}
