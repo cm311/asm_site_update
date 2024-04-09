@@ -9,5 +9,7 @@ urlpatterns = [
     path('logout/', views.custom_logout, name='logout'),
     path('success/', views.success, name='success'),
     path('list/', views.update_KA_json, name='update_KA_json'),
-    path('approve_updates/', views.approve_updates, name='approve_updates')
+    path('approve_updates/', views.approve_updates, name='approve_updates'),
+    path('finalize_update/', views.finalize_update, name='finalize_update'),
+    path('<int:id>/', views.detail, name='detail')
 ]
