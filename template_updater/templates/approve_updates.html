@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="side-menu">
+    <div id="menu-trigger">
+      <div id="message">
+        <p>Suggested</p>
+        <p>Updates</p>
+      </div>
+    </div>
+    <ul>
+      {% for object in suggested_updated %}
+        <li><a href="{% url 'detail' object.id %}">{{ object.ka_number }} - {{ object.subject }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div id="main-content">
+    <div class="form-container form-container-1">  <form>
+        {% csrf_token %}
+        {% load crispy_forms_tags %}
+        {{ actions_form1|crispy }}
+        {{ ticket_form1|crispy }}
+      </form>
+    </div>
+  
+    <div class="button-container">
+      <button type="button">Copy</button>
+    </div>
+  
+    <div class="form-container form-container-2">
+      <form method="post" action="{% url 'finalize_update' %}">
+        {% csrf_token %}
+        {% load crispy_forms_tags %}
+        {{ actions_form2|crispy }}
+        {{ ticket_form2|crispy }}
+        <button type="submit">Update Template</button>
+        <input type="hidden" id="todelete" name="todelete" value="{{ suggested_id }}">
+      </form>
+    </div>
+  </div>
+
+
+<script>
+    const sideMenu = document.getElementById('side-menu');
+
+    sideMenu.addEventListener('mouseleave', () => {
+    sideMenu.classList.remove('open');
+    });
+
+    sideMenu.addEventListener('mouseover', () => {
+    sideMenu.classList.add('open');
+    });
+</script>
+
+
+<script>
+    const copyButton = document.querySelector('.button-container button');
+    const form1 = document.querySelector('.form-container-1 form:first-child');
+    const form2 = document.querySelector('.form-container-2 form:last-child');
+  
+    copyButton.addEventListener('click', () => {
+      const form1Elements = form1.querySelectorAll('input, select, textarea');
+  
+      for (const element of form1Elements) {
+        const correspondingElement = form2.querySelector(`[name="${element.name}"]`);
+        if (correspondingElement) {
+          correspondingElement.value = element.value;
+        }
+      }
+    });
+  </script>
+
+{% endblock %}

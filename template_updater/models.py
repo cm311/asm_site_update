@@ -35,4 +35,18 @@ class Ticket(models.Model):
     return f"KA #{self.ka_number} - {self.ka_title} - {self.actions}"
 
 
+class SuggestedUpdate(models.Model):
+  ka_number = models.IntegerField()  # Unique KA number that this links to
+  service = models.CharField(max_length=355) # The service dropbox
+  configuration_item = models.CharField(max_length=355) # the configuration item dropbox
+  ticket_type = models.CharField(max_length=455)
+  subject = models.CharField(max_length=255) # The subject line
+  description = models.TextField()
+  actions_and_solutions = models.TextField()
+
+  def __str__(self):
+    return self.subject
+
+
+
 

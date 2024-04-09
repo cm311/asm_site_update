@@ -3,6 +3,12 @@
 <head>
     <title>Template Updater</title>
     <style>
+
+      nav {
+        display: flex;  /* Make the navbar a flex container */
+        justify-content: flex-end;  /* Align content to the right */
+      }
+
         body {
           font-family: sans-serif;
           background-color: #247ba0; /* Blue background for entire page */
@@ -60,21 +66,117 @@
         button {
           margin-top: 10px;
         }
+        #side-menu {
+          position: fixed;
+          top: 0;
+          left: -18%;  /* Position slightly off-screen */
+          width: 25%;  /* Menu width */
+          height: 100vh;  /* Set menu height to 100% viewport height */
+          background-color: #44acdb;  /* Menu background color */
+          transition: left 0.3s ease-in-out;  /* Smooth slide-out animation */
+      }
+      
+      #side-menu.open {  /* Show menu when open class is added */
+          left: 0;  /* Slide menu into view */
+      }
+      
+      #menu-trigger {
+          display: flex;
+          justify-content: right;
+          align-items: right;
+          height: 8%;  /* Define trigger element height */
+          background-color: #226987;  /* Trigger background color */
+          cursor: pointer;  /* Make trigger clickable */
+          transition: background-color 0.2s ease-in-out;
+
+          background-image: linear-gradient(to bottom, #226987 0%, #44acdb 100%);
+      }
+      
+      #main-content {
+          margin-left: 3%;  /* Make space for the side menu */
+          padding: 2%;
+      }
+      
+      #side-menu ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          margin-top: 50px;  /* Make space for the trigger element */
+      }
+      
+      #side-menu li {
+          padding: 10px;
+          color: black;
+      }
+      
+      #side-menu a {
+          text-decoration: none;
+          color: black;
+      }
+      
+      #side-menu a:hover {
+          color: #333;
+      }
+
+      #message p {
+        color: #242b2e;
+        text-align: right;
+        width: fit-content;
+      }
+
+      .form-container {
+        display: inline-block;  /* Display forms side-by-side */
+        width: 46%;  /* Set width to roughly half the available space */
+        vertical-align: top;  /* Align forms at the top */
+        margin: 0px;  /* Add some margin between forms */
+      }
+
+      /* Create a container for the button */
+      .button-container {
+        display: inline-block;
+        justify-content: center;  /* Center the button horizontally */
+        width: 3%;  /* Set width for the button container */
+        margin-top: 30%;
+      }
+
+
+      ul li {
+        text-align: right;
+      }
+
+      ul li:nth-child(even) {
+        background-color: #77808c;  /* Light gray for even elements */
+      }
+      
+      ul li:nth-child(odd) {
+        background-color: #a8aaad;  /* Slightly darker gray for odd elements */
+      }
+
+      a {
+        color: white;
+      }
+
+      a:visited {
+        color: white;
+      }
+      
           </style>
 </head>
 <body>
     
-<!--
-<nav>
-    {% if user.is_authenticated %}
-        <span>Welcome, {{ user.username }}</span>
-        <a href="{ url 'logout' }">Logout</a>
-    {% else %}
-        <a href="{ url 'login' }">Login</a>
-    {% endif %}
-</nav>
 
--->
+  <nav style="background-color: #30363d; color: white; padding: 10px; display: flex; justify-content: flex-end;">
+    {% if user.is_authenticated %}
+      <span style="margin-right: 10px;">Logged in as {{ user.username }}</span>
+      <a href="{% url 'update_ticket' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Update Template</a>
+      <a href="{% url 'logout' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Logout</a>
+      <a href="{% url 'approve_updates' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Review Suggested</a>
+    {% else %}
+      <a href="{% url 'update_ticket' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Update Template</a>
+      <a href="{% url 'login' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Login</a>
+    {% endif %}
+  </nav>
+
 
 <div id="content">
     {% block content %}
