@@ -6,12 +6,15 @@ from django.db import connection
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers  # Import for general serializer usage
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Field
 from .models import Ticket, Action, SuggestedUpdate
 from .forms import TicketForm, ActionForm, TagForm, KASearchForm
 
 
 
 def update_ticket(request):
+
   if request.method == 'POST' and 'updated' in request.POST:
     ticket_form = TicketForm(request.POST)
     actions_form = ActionForm(request.POST)
@@ -54,7 +57,7 @@ def update_ticket(request):
         'ticket_type' : ticket.ticket_type})
       actions_form = ActionForm(initial={'actions_and_solutions' : actions['actions_and_solutions'], 'subject' : actions['subject'], 'description' : actions['description']})
 
-      context = {'ticket_form': ticket_form, 'actions_form' : actions_form}
+      context = {'ticket_form': ticket_form, 'actions_form' : actions_form, 'helper' : helper}
       return render(request, 'update_ticket.html', context)
     else:
       ticket_form = TicketForm()
@@ -129,6 +132,12 @@ def finalize_update(request):
   if request.method == 'POST':
     todelete = SuggestedUpdate.objects.get(id=int(request.POST['todelete']))
     todelete.delete()
+
+    if 'reject' in request.POST:
+      message = "Template for KA " + request.POST['ka_number'] + " not updated."
+      return render(request, 'finalized.html', {'message' : message})
+
+
     
     ticket_form = TicketForm(request.POST)
     actions_form = ActionForm(request.POST)
@@ -169,8 +178,8 @@ def finalize_update(request):
         # Add the action to the ticket's actions ManyToManyField
         ticket.actions.add(action)
     
-    
-    return render(request, 'finalized.html', {})
+    message = "Success!!  Template for KA " + request.POST['ka_number'] + "  updated."
+    return render(request, 'finalized.html', {'message' : message})
 
 
 

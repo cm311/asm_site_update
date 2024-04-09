@@ -9,6 +9,9 @@ class TicketForm(forms.ModelForm):
   def __init__(self, *args, **kwargs):
     super(TicketForm, self).__init__(*args, **kwargs)
     self.fields['ticket_type'].widget = forms.Textarea(attrs={'cols': 80, 'rows': 1})  # Adjust cols and rows as needed
+    for field_name, field in self.fields.items():
+      if field_name != 'ka_number':
+        field.required = False
 
 
 class ActionForm(forms.ModelForm):

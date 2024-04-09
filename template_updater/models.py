@@ -21,10 +21,10 @@ class Tag(models.Model):
 class Ticket(models.Model):
   """Model representing a service ticket."""
   ka_number = models.IntegerField(primary_key=True)  # Unique KA number that this links to
-  ka_title = models.CharField(max_length=255) # The KA description
-  service = models.CharField(max_length=355) # The service dropbox
-  configuration_item = models.CharField(max_length=355) # the configuration item dropbox
-  ticket_type = models.CharField(max_length=455)
+  ka_title = models.CharField(max_length=255, default=' ') # The KA description
+  service = models.CharField(max_length=355, default=' ') # The service dropbox
+  configuration_item = models.CharField(max_length=355, default=' ') # the configuration item dropbox
+  ticket_type = models.CharField(max_length=455, default=' ')
 
   actions = models.ManyToManyField(Action, related_name='tickets') # Each KA can have several possible actions and solutions
   tags = models.ManyToManyField(Tag, related_name='tickets') # Each KA has several tags.  Things are searched by this tag.
@@ -37,12 +37,12 @@ class Ticket(models.Model):
 
 class SuggestedUpdate(models.Model):
   ka_number = models.IntegerField()  # Unique KA number that this links to
-  service = models.CharField(max_length=355) # The service dropbox
-  configuration_item = models.CharField(max_length=355) # the configuration item dropbox
-  ticket_type = models.CharField(max_length=455)
-  subject = models.CharField(max_length=255) # The subject line
-  description = models.TextField()
-  actions_and_solutions = models.TextField()
+  service = models.CharField(max_length=355, default=' ') # The service dropbox
+  configuration_item = models.CharField(max_length=355, default=' ') # the configuration item dropbox
+  ticket_type = models.CharField(max_length=455, default=' ')
+  subject = models.CharField(max_length=255, default=' ') # The subject line
+  description = models.TextField(default=' ')
+  actions_and_solutions = models.TextField(default=' ')
 
   def __str__(self):
     return self.subject

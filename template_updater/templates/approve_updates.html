@@ -35,6 +35,7 @@
         {{ actions_form2|crispy }}
         {{ ticket_form2|crispy }}
         <button type="submit">Update Template</button>
+        <button type="submit" id="reject" name="reject" value="reject">Reject Template</button>
         <input type="hidden" id="todelete" name="todelete" value="{{ suggested_id }}">
       </form>
     </div>
