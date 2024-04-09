@@ -2,3 +2,4 @@ asm_site_update_venv/
 venv/
 __pycache__/
 asm_site_update/__pycache__/
+template_updater/__pycache__/
