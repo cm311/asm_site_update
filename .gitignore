@@ -3,3 +3,4 @@ venv/
 __pycache__/
 asm_site_update/__pycache__/
 template_updater/__pycache__/
+*.sqlite3
