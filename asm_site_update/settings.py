@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'template_updater',
     'rest_framework',
     'crispy_forms',
-    'crispy_bootstrap5'
+    'crispy_bootstrap5',
+    'whitenoise.runserver_nostatic'
 ]
 
 MIDDLEWARE = [
@@ -79,10 +80,14 @@ WSGI_APPLICATION = 'asm_site_update.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': { 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        'NAME': 'dlgg9vie7ehl4', 
+        'USER': 'pdbklnynvbuemi', 
+        'PASSWORD': 'e8a239ad1c9215aeda808fbaa10ee7ef4d22d45a1ab6c761275b777de519e828', 
+        'HOST': 'ec2-52-72-109-141.compute-1.amazonaws.com', 
+        'PORT': '5432', 
+    } 
 }
 
 
