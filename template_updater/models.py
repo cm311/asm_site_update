@@ -20,7 +20,8 @@ class Tag(models.Model):
 
 class Ticket(models.Model):
   """Model representing a service ticket."""
-  ka_number = models.IntegerField(primary_key=True)  # Unique KA number that this links to
+  id = models.AutoField(primary_key=True)
+  ka_number = models.IntegerField()  # Unique KA number that this links to
   ka_title = models.CharField(max_length=255, default=' ') # The KA description
   service = models.CharField(max_length=355, default=' ') # The service dropbox
   configuration_item = models.CharField(max_length=355, default=' ') # the configuration item dropbox
@@ -32,11 +33,12 @@ class Ticket(models.Model):
   
 
   def __str__(self):
-    return f"KA #{self.ka_number} - {self.ka_title} - {self.actions}"
+    return f"{self.id} - KA #{self.ka_number} - {self.ka_title} - {self.actions}"
 
 
 class SuggestedUpdate(models.Model):
-  ka_number = models.IntegerField()  # Unique KA number that this links to
+  id = models.AutoField(primary_key=True)
+  ka_number = models.IntegerField()  #KA number that this links to
   service = models.CharField(max_length=355, default=' ') # The service dropbox
   configuration_item = models.CharField(max_length=355, default=' ') # the configuration item dropbox
   ticket_type = models.CharField(max_length=455, default=' ')
