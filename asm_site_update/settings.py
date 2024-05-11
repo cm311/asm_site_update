@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'asm_site_update.wsgi.application'
 DATABASES = {
     'default': { 
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        'NAME': 'dej77tmuc4c4c2', 
-        'USER': 'tvcnkzvhfelfny', 
-        'PASSWORD': 'd2460c3b0af15b7f474356b802e804c7b603984e46154013c39a84343b3d8cdf', 
-        'HOST': 'ec2-44-215-176-210.compute-1.amazonaws.com', 
+        'NAME': 'de8muplej0oqfj', 
+        'USER': 'kdhaiugqyactkd', 
+        'PASSWORD': '7e19198795825a8503d688e058b4d408dd63c064602a8fb524ec26caad6464dc', 
+        'HOST': 'ec2-54-221-246-4.compute-1.amazonaws.com', 
         'PORT': '5432', 
     } 
 }

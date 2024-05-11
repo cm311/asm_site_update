@@ -37,7 +37,10 @@ def update_ticket(request):
     actions_form = ActionForm()
 
     ka_number = request.POST['search_ka']
+    print(ka_number)
+    print(len(Ticket.objects.filter(ka_number=int(ka_number)))) 
     if Ticket.objects.filter(ka_number=int(ka_number)).exists():
+      
       ticket = Ticket.objects.filter(ka_number=ka_number)[0]
 
       actions = ticket.actions.all().values()[0]
