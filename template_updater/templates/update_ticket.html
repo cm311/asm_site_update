@@ -2,23 +2,64 @@
 
 
 {% block content %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#search_ka").keyup(function() {
+        $("#item_list").empty()
+
+        var search_text = $(this).val();
+        var csrftoken = $('[name="csrfmiddlewaretoken"]').attr('value');  // Get CSRF token
+        $.ajax({
+          url: "/search_kas/",
+          type: "post",
+          data: { 'search_term': search_text, 'csrfmiddlewaretoken': csrftoken }, // Include CSRF token in data
+          success: function(response) {
+            $("#item_list").empty()
+            for(var i=0; i < response["items"].length; i++) {
+              item = response["items"][i] + " "
+              link = response["links"][i]
+
+              var currentURL = window.location.href;
+
+              if (currentURL.includes("search")) {
+                $("#item_list").append($("<li>" + "<a href=https://asm-site-update-baa2f1b3e712.herokuapp.com/search/" + link + ">" + item + "</a>" + "</li>"));
+              }
+              else {
+                $("#item_list").append($("<li>" + "<a href=search/" + link + ">" + item + "</a>" + "</li>"));
+              }
+            }
+          }
+        });
+      });
+    });
+  </script>
+  
+  {% csrf_token %}
+
+  
+
+
+
+
   <h1> Update Template </h1>
   
   <div style="display: flex; flex-direction: row;">
 
-    <div>
+    <div style="width: 18%; margin-left:1%; margin-top: 0%">
       <form method="post" action="{% url 'update_ticket' %}">
         {% csrf_token %}
         <label for="search_ka">Search for KA: </label>
         <input type="text" id="search_ka" name="search_ka">
         <input type="hidden" id="searched" name="searched" value="searched">
-        <button type="submit" id="search_ka_button">Search</button>
+        
 
         <p>{{ nonexistant }}</p>
-        <div id="search_results">
-          
-        </div>
+        
       </form>
+      <ul id="item_list" width="100%" style="list-style-type: none;"></ul>
+      
       
     </div>
 

@@ -11,5 +11,7 @@ urlpatterns = [
     path('list/', views.update_KA_json, name='update_KA_json'),
     path('approve_updates/', views.approve_updates, name='approve_updates'),
     path('finalize_update/', views.finalize_update, name='finalize_update'),
-    path('<int:id>/', views.detail, name='detail')
+    path('search_kas/', views.search_kas, name='search_kas'),
+    path('<int:id>/', views.detail, name='detail'),
+    path('search/<int:id>/', views.search_detail, name='search_detail')
 ]

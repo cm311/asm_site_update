@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import serializers  # Import for general serializer usage
 from .models import Ticket, Action, SuggestedUpdate
 from .forms import TicketForm, ActionForm, TagForm, KASearchForm
+from django.urls import reverse
 
 
 
@@ -184,6 +185,26 @@ def finalize_update(request):
 
 
 
+def search_kas(request):
+  if request.method == 'POST':
+    search_term = request.POST.get('search_term')
+    # Perform your search logic here
+    filtered_items = Ticket.objects.all()
+    item_list = []
+    links = []
+    for item in filtered_items:
+      # Prepare your list item data here (e.g., item name, description)
+      actions = item.actions.all().values()[0]
+      item_title = str(str(item.ka_number) + " - " + actions['subject'])  # Replace with your actual data
+      link_id = item.id
+
+      if search_term in item_title.lower():
+        item_list.append(item_title)
+        links.append(link_id)
+    return JsonResponse({'items': item_list, 'links' : links})
+
+
+
 
 
 
@@ -207,6 +228,9 @@ def custom_logout(request):
     return render(request, 'logout.html', context=context)
 
 def detail(request, id):
+
+  print(request.GET)
+
   suggested_updated = SuggestedUpdate.objects.all()
   
 
@@ -239,3 +263,24 @@ def detail(request, id):
    'actions_form1' : actions_form1, 'ticket_form2': ticket_form2, 'actions_form2' : actions_form2, 'suggested_id' : suggested.id}
 
   return render(request, 'approve_updates.html', context)
+
+
+
+def search_detail(request, id):
+  ticket = Ticket.objects.filter(id=id)[0]
+  actions = ticket.actions.all().values()[0]
+
+  ticket_form = TicketForm(initial={'ka_number': ticket.ka_number, 'service' : ticket.service, 'configuration_item' : ticket.configuration_item,
+  'ticket_type' : ticket.ticket_type})
+
+  actions_form = ActionForm(initial={'subject' : actions['subject'], 'actions_and_solutions' : actions['actions_and_solutions'], 'description' : actions['description']})
+
+
+  context = {'ticket' : ticket, 'ticket_form': ticket_form,
+  'actions_form' : actions_form}
+
+  # Reverse URL resolution
+  url = reverse('search_detail', args=[id])
+  print(url)
+
+  return render(request, 'update_ticket.html', context)
