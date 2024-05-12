@@ -229,8 +229,6 @@ def custom_logout(request):
 
 def detail(request, id):
 
-  print(request.GET)
-
   suggested_updated = SuggestedUpdate.objects.all()
   
 
@@ -255,8 +253,9 @@ def detail(request, id):
   
   #no ticket found for that KA number in the existing DB
   except:
-    ticket_form2 = TicketForm(initial={'ka_number': suggested.ka_number})
-    actions_form2 = ActionForm(initial={'subject' : 'NO KA DATA FOUND', 'description' : 'NO KA DATA FOUND'})
+    ticket_form2 = TicketForm(initial={'ka_number': suggested.ka_number, 'service': 'Empty','configuration_item':'Empty',
+          'ticket_type' : 'Empty'})
+    actions_form2 = ActionForm(initial={'subject' : 'NO KA DATA FOUND', 'description' : 'Empty', 'actions_and_solutions' : 'Empty'})
 
 
   context = {'suggested_updated' : suggested_updated, 'ticket_form1': ticket_form1,

@@ -9,7 +9,7 @@
       $("#search_ka").keyup(function() {
         $("#item_list").empty()
 
-        var search_text = $(this).val();
+        var search_text = $(this).val().toLowerCase();
         var csrftoken = $('[name="csrfmiddlewaretoken"]').attr('value');  // Get CSRF token
         $.ajax({
           url: "/search_kas/",
@@ -24,10 +24,10 @@
               var currentURL = window.location.href;
 
               if (currentURL.includes("search")) {
-                $("#item_list").append($("<li>" + "<a href=https://asm-site-update-baa2f1b3e712.herokuapp.com/search/" + link + ">" + item + "</a>" + "</li>"));
+                $("#item_list").append($("<li style='padding:1%;'>" + "<a style='color:black;' href=https://asm-site-update-baa2f1b3e712.herokuapp.com/search/" + link + ">" + item + "</a>" + "</li>"));
               }
               else {
-                $("#item_list").append($("<li>" + "<a href=search/" + link + ">" + item + "</a>" + "</li>"));
+                $("#item_list").append($("<li style='padding:1%;'>" + "<a style='color:black;' href=search/" + link + ">" + item + "</a>" + "</li>"));
               }
             }
           }
@@ -50,7 +50,7 @@
     <div style="width: 18%; margin-left:1%; margin-top: 0%">
       <form method="post" action="{% url 'update_ticket' %}">
         {% csrf_token %}
-        <label for="search_ka">Search for KA: </label>
+        <label style="width: 78%; margin-bottom: 1%;" for="search_ka">Search for Template: </label>
         <input type="text" id="search_ka" name="search_ka">
         <input type="hidden" id="searched" name="searched" value="searched">
         
