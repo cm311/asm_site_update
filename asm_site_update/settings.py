@@ -87,7 +87,16 @@ DATABASES = {
         'PASSWORD': '7e19198795825a8503d688e058b4d408dd63c064602a8fb524ec26caad6464dc', 
         'HOST': 'ec2-54-221-246-4.compute-1.amazonaws.com', 
         'PORT': '5432', 
-    } 
+    },
+
+    'test': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Replace with your engine (if different)
+        'NAME': 'testing_db',
+        'USER': 'postgres',
+        'PASSWORD': 'sdf7sd8q',
+        'HOST': 'localhost',  # Optional, defaults to localhost
+        'PORT': '5432',  # Optional, defaults to 5432 (Postgres default)
+    }
 }
 
 
