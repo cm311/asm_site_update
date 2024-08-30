@@ -283,3 +283,11 @@ def search_detail(request, id):
   print(url)
 
   return render(request, 'update_ticket.html', context)
+
+
+
+
+
+
+def bell_info(request):
+  return render(request, 'bell.html', {})

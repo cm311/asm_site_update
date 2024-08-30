@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+    {% block content %}
+    <div style="display: flex; flex-direction: row;">
+
+        <div style="width: 18%; margin-left:1%; margin-top: 0%">
+            <!--  action=" url 'search_bell' "> -->
+            <form method="post" >
+                {% csrf_token %}
+                <label style="width: 78%; margin-bottom: 1%;" for="search_ka">Store Number: </label>
+                <input type="text" id="search_ka" name="search_ka">
+                <input type="hidden" id="searched" name="searched" value="searched">
+            </form>
+        </div>
+
+        <div>
+            <p>The searched store's information</p>
+        </div>
+
+    </div>
+{% endblock %}
+

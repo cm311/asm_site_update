@@ -13,5 +13,6 @@ urlpatterns = [
     path('finalize_update/', views.finalize_update, name='finalize_update'),
     path('search_kas/', views.search_kas, name='search_kas'),
     path('<int:id>/', views.detail, name='detail'),
-    path('search/<int:id>/', views.search_detail, name='search_detail')
+    path('search/<int:id>/', views.search_detail, name='search_detail'),
+    path('bell_info/', views.bell_info, name='bell_info')
 ]

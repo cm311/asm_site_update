@@ -169,11 +169,14 @@
     {% if user.is_authenticated %}
       <span style="margin-right: 10px;">Logged in as {{ user.username }}</span>
       <a href="{% url 'update_ticket' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Update Template</a>
-      <a href="{% url 'logout' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Logout</a>
       <a href="{% url 'approve_updates' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Review Suggested</a>
+      <a href="{% url 'logout' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Logout</a>
+      <a href="{% url 'bell_info' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Bell Info</a>
+      
     {% else %}
       <a href="{% url 'update_ticket' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Update Template</a>
       <a href="{% url 'login' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Login</a>
+      <a href="{% url 'bell_info' %}" style="background-color: #424242; padding: 5px 10px; border: 1px solid #171717; border-radius: 5px; text-decoration: none;">Bell Info</a>
     {% endif %}
   </nav>
 
