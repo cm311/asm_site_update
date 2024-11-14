@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'd52essr8arq2lf', 
         'USER': 'uai2mhgr7ebkm9', 
         'PASSWORD': 'p64d40be53368cb878c9b939d89e696b3dedd8fa2a2b15f5ecbe72c3ad6f74b26', 
-        'HOST': 'ec2-52-23-12-61.compute-1.amazonaws.com', 
+        'HOST': 'c5hilnj7pn10vb.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com', 
         'PORT': '5432', 
     },
 
